@@ -23,6 +23,10 @@ Il sistema si basa su un'architettura distribuita composta da tre board che comu
 * `espnow.h`: Comunicazione wireless a bassa latenza
 * `ESP8266WiFi.h`: Libreria Wi-Fi
 
+**Audio**
+
+Gli effetti sonori sono generati dall'Arduino Uno e riprodotti attraverso uno speaker integrato. Questo è regolabile fisicamente dai giocatori utilizzando un potenziometro analogico dedicato.
+
 **Alimentazione**
 
 Il sistema è alimentato a 12V per soddisfare i requisiti della TV CRT. Tuttavia, viene utilizzato un modulo Step-Down DC-DC tarato a 5V per l'alimentazione dell'Arduino Uno (e conseguentemente delle due ESP8266) mediante porta USB.
