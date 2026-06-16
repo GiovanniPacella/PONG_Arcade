@@ -14,7 +14,7 @@ PONG Arcade è un cabinato retrò dedicato al videogioco omonimo, costruito util
 ## Architettura del Sistema
 Il sistema si basa su un'architettura distribuita composta da tre board che comunicano tra loro:
 1. **Master (Arduino Uno):** Gestione del gioco, della fisica della pallina, della generazione del segnale video e del sensore IR per la gettoneria 
-2. **Slave 1 e 2 (Wemos D1 Mini - ESP8266):** Microcontrollori che si occupano di leggere gli input analogici, aggiornare i display a 7 segmenti dei punteggi e gestire i LED
+2. **Controller 1 e 2 (Wemos D1 Mini - ESP8266):** Microcontrollori che si occupano di leggere gli input analogici, aggiornare i display a 7 segmenti dei punteggi e gestire i LED
 
 **Comunicazione:** Il Master comunica con il primo controller tramite Seriale (UART), mentre i due controller si scambiano i dati di sincronizzazione in wireless attraverso il protocollo **ESP-NOW**.
 
@@ -24,10 +24,11 @@ Il sistema si basa su un'architettura distribuita composta da tre board che comu
 * `ESP8266WiFi.h`: Libreria Wi-Fi
 
 **Alimentazione**
+
 Il sistema è alimentato a 12V per soddisfare i requisiti della TV CRT. Tuttavia, viene utilizzato un modulo Step-Down DC-DC tarato a 5V per l'alimentazione dell'Arduino Uno (e conseguentemente delle due ESP8266) mediante porta USB.
 
 ## Schema di Collegamento
-_Nota: Lo schema seguente utilizza un sensore infrarossi FC-51 e non quello utilizzato nello specifico nel progetto_
+_Nota: Lo schema seguente utilizza un sensore infrarossi FC-51 e non quello utilizzato specificatamente nel progetto_
 ![Schema di Collegamento](images/schemaCollegamento.png)
 
 ## Componenti Hardware
