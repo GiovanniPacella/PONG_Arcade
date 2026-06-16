@@ -1,14 +1,15 @@
-# PONG-Arcade
+# PONG Arcade
 
-![Foto Progetto](images/progetto.jpg)
+![Foto Progetto](images/progetto.jpeg)
 
 ## Indice
-- [Descrizione del Progetto](#-descrizione-del-progetto)
-- [Schema di Collegamento](#-schema-di-collegamento)
-- [Componenti Hardware](#-componenti-hardware)
+- [Descrizione del Progetto](#descrizione-del-progetto)
+- [Schema di Collegamento](#schema-di-collegamento)
+- [Componenti Hardware](#componenti-hardware)
+- [Struttura delle Cartelle](#struttura-delle-cartelle)
 
 ## Descrizione del Progetto
-PONG Arcade è un cabinato retrò dedicato al videogioco omonimo, costruito utilizzando una piccola TV a tubo catodico. Il progetto è basato sull'utilizzo di un Arduino UNO come modulo centrale (logica applicativa del gioco e trasmissione del segnale video) e sull'utilizzo di due controller ESP8266 separati. Questi ultimi elaborano l'input dato dai giocatori tramite due potenziometri lineari e gestiscono display a 7 segmenti e led per la gestione e visualizzazione del punteggio. 
+PONG Arcade è un cabinato retrò dedicato al videogioco omonimo, costruito utilizzando una piccola TV a tubo catodico. Il progetto è basato sull'utilizzo di un Arduino UNO come modulo centrale (logica applicativa del gioco e trasmissione del segnale video) e sull'utilizzo di due controller ESP8266 separati. Questi ultimi elaborano l'input dato dai giocatori tramite due potenziometri lineari e sfruttano display a 7 segmenti e led per la gestione e visualizzazione del punteggio. 
 
 ## Schema di Collegamento
 ![Schema di Collegamento](images/schemaCollegamento.png)
