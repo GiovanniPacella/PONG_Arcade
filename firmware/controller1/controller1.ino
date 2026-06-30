@@ -1,3 +1,4 @@
+#include <Comandi.h>
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
@@ -42,7 +43,7 @@ dati datiRicevuti; // Dati da ricevere
 void OnDataRecv(uint8_t * mac, uint8_t *incomingData, uint8_t len) {
   memcpy(&datiRicevuti, incomingData, sizeof(datiRicevuti)); // Copia dei dati ricevuti
   if (datiRicevuti.tipo == 1) { 
-    Serial.write(datiRicevuti.valore + 100); // (100 - 182) - Racchetta Giocatore 2
+    Serial.write(datiRicevuti.valore); // Racchetta Giocatore 2
   }
 }
 
@@ -110,40 +111,46 @@ void loop() {
   while (Serial.available() > 0) { 
     byte comando = Serial.read(); // Legge il singolo byte 
     
-    if (comando == 81) { // 81 - Punto Giocatore 1 (Q)
-      blinkLed();
-      score_P1++; aggiornaDisplay(score_P1); // Aggiornamento display
-    } 
-    else if (comando == 82) { // 82 - Punto Giocatore 2 (R)
-      score_P2++; datiDaInviare.tipo = 2; datiDaInviare.valore = score_P2;
-      esp_now_send(macAddrP2, (uint8_t *) &datiDaInviare, sizeof(datiDaInviare)); // Invio comando al Controller 2
-    }
-    else if (comando == 84) { // 84 - Inizio partita (T)
-      aggiornaDisplay(0); // Display Giocatore 1 a 0
-      datiDaInviare.tipo = 2; datiDaInviare.valore = 0; // Display Giocatore 2 a 0
-      esp_now_send(macAddrP2, (uint8_t *) &datiDaInviare, sizeof(datiDaInviare)); // Invio comando al Controller 2
-      score_P1 = 0; score_P2 = 0; // Reset punteggi
-    }
-    else if (comando == 85) { // 85 - Power off display (U)
-      aggiornaDisplay(10); // Spegne il display locale (Giocatore 1)
-      datiDaInviare.tipo = 2; datiDaInviare.valore = 11; // Invia il comando di spegnimento (Giocatore 2)
-      esp_now_send(macAddrP2, (uint8_t *) &datiDaInviare, sizeof(datiDaInviare)); // Invio comando al Controller 2
-      
-      // Controllo Vittoria
-      if (score_P1 == 10) {
-        delay(800);
-        blinkVictory();
-      }
-    }
+    switch(comando) {
+      case POINT_P1: // Punto Giocatore 1
+        blinkLed();
+        score_P1++; aggiornaDisplay(score_P1); // Aggiornamento display
+
+        break;
+      case POINT_P2: // Punto Giocatore 2
+        score_P2++; datiDaInviare.tipo = 2; datiDaInviare.valore = score_P2;
+        esp_now_send(macAddrP2, (uint8_t *) &datiDaInviare, sizeof(datiDaInviare)); // Invio comando al Controller 2
+        break;
+      case RESET: // Inizio partita
+        aggiornaDisplay(0); // Display Giocatore 1 a 0
+        datiDaInviare.tipo = 2; datiDaInviare.valore = 0; // Display Giocatore 2 a 0
+        esp_now_send(macAddrP2, (uint8_t *) &datiDaInviare, sizeof(datiDaInviare)); // Invio comando al Controller 2
+        score_P1 = 0; score_P2 = 0; // Reset punteggi
+        break;
+      case POWER_OFF: // Power off display
+        aggiornaDisplay(10); // Spegnimento display locale (Giocatore 1)
+        datiDaInviare.tipo = 2; datiDaInviare.valore = 11; // Invia il comando di spegnimento (Giocatore 2)
+        esp_now_send(macAddrP2, (uint8_t *) &datiDaInviare, sizeof(datiDaInviare)); // Invio comando al Controller 2
+
+        // Controllo Vittoria
+        if (score_P1 == 10) {
+          delay(800);
+          blinkVictory();
+        }
+        break;
+        
+      default:
+        break;
+    }  
   }
 
   // 2. LETTURA E INVIO VALORE POTENZIOMETRO
   int potValue = analogRead(pinPot); // Lettura valore
 
-  int8_t paddleY = map(potValue, 0, 1023, 0, 82); 
+  int8_t paddleY = map(potValue, 0, 1023, MIN_PADDLE_P1, MAX_PADDLE_P1); 
 
   if (paddleY != ultimaPosizioneY) { // Se il valore letto è diverso dall'ultima posizione registrata...
-    Serial.write(paddleY); // (0 - 82) - racchetta Giocatore 1
+    Serial.write(paddleY); // Scrittura racchetta Giocatore 1
     ultimaPosizioneY = paddleY; // Aggiornamento ultima posizione rilevata
   }
 

@@ -1,3 +1,4 @@
+#include <Comandi.h>
 #include <ESP8266WiFi.h>
 #include <espnow.h>
 
@@ -125,7 +126,7 @@ void loop() {
 
   // LETTURA E INVIO VALORE POTENZIOMETRO
   int potValue = analogRead(pinPot); // Lettura valore potenziometro
-  int8_t paddleY = map(potValue, 0, 1023, 0, 82); // Mapping sui pixel dello schermo
+  int8_t paddleY = map(potValue, 0, 1023, MIN_PADDLE_P2, MAX_PADDLE_P2); // Mapping sui pixel dello schermo
 
   if (paddleY != ultimaPosizioneY) { // Se il valore letto è diverso dall'ultima posizione registrata...
     datiInviati.tipo = 1; // Racchetta

@@ -1,3 +1,4 @@
+#include <Comandi.h>
 #include <TVout.h>
 #include <fontALL.h>
 
@@ -9,7 +10,6 @@ const uint8_t coinPin = 2; // Pin gettoneria
 // Interrupt e gestione loop
 bool waitingCoin = true; // flag coin per loop
 volatile bool coinInserted = false; // flag per interrupt
-
 
 // Strutture dati
 struct Ball {
@@ -98,7 +98,7 @@ void victoryScreen(const char* vincitore) {
 
   // messaggio vittoria
   TV.print(0, 35, "V I C T O R Y !"); TV.print(28, 55, vincitore);
-  Serial.write(85); // Power off display (85)
+  Serial.write(POWER_OFF); // Power off display
 
   // Melodia Buzzer
   TV.tone(392, 120); TV.delay(120); // Sol
@@ -137,7 +137,7 @@ void setup() {
 
   attachInterrupt(digitalPinToInterrupt(coinPin), isrCoin, RISING); // Aggancio Interrupt 
 
-  Serial.write(85); // Power off display (85)
+  Serial.write(POWER_OFF); // Power off display
 
   
   // Schermata di avvio
@@ -150,7 +150,7 @@ void setup() {
   TV.delay(100);
   TV.tone(1500, 200);
 
-  TV.delay(5000); // Da modificare: Lo schermo CRT, se freddo, si accende lentamente
+  TV.delay(6000); // Lo schermo CRT si accende lentamente (se freddo)
   TV.clear_screen();
 }
 
@@ -188,7 +188,7 @@ void loop() {
       coinInserted = false; // Reset variabile Interrupt
       detachInterrupt(digitalPinToInterrupt(coinPin)); // Disattivazione Interrupt
 
-      Serial.write(84); // Accende a 0 i display (84 - RESET)
+      Serial.write(RESET); // Accende a 0 i display (RESET)
 
       TV.clear_screen(); // Pulizia schermo
       TV.delay(1000);
@@ -200,12 +200,12 @@ void loop() {
     while (Serial.available() > 0) { 
       byte dato = Serial.read(); // singolo byte
       
-      if (dato <= 82) { // Se il valore del byte è inferiore o uguale a 82 - Giocatore 1
+      if (dato >= MIN_PADDLE_P1 && dato <= MAX_PADDLE_P1) { // Se il valore del byte si trova tra gli estremi - Giocatore 1
         p1.posY = dato; // Impostazione posizione racchetta - Giocatore 1
       } 
-      else if (dato >= 100 && dato <= 182) {
-        // Se il valore del byte è compreso tra 100 e 182 - Giocatore 2
-        p2.posY = dato - 100; // Impostazione posizione racchetta - Giocatore 1
+      else if (dato >= MIN_PADDLE_P2 && dato <= MAX_PADDLE_P2) {
+        // Se il valore del byte è compreso tra gli estremi - Giocatore 2
+        p2.posY = dato - OFFSET_PADDLE_P2; // Impostazione posizione racchetta - Giocatore 2
       }
     }
 
@@ -226,7 +226,7 @@ void loop() {
         TV.tone(800, 30); // 800 Hz, 300 ms
       } else { // Palla fuori dallo schermo - Assegnazione punto al Giocatore 2
         p2.score++;
-        Serial.write(82); // Incremento punteggio - Giocatore 2 (82)
+        Serial.write(POINT_P2); // Incremento punteggio - Giocatore 2
         resetBall(1); // Reset pallina - "Servizio" verso il Giocatore che ha fatto punto (G2)
         if(p2.score > 9){ // Vittoria Giocatore 2  - Score pari a 10
           victoryScreen("Player 2"); return;
@@ -242,7 +242,7 @@ void loop() {
         TV.tone(800, 30); // 800 Hz, 300 ms
       } else { // Palla fuori dallo schermo - Assegnazione punto al Giocatore 1
         p1.score++; // Incremento punteggio al Giocatore 1
-        Serial.write(81); // Incremento punteggio - Giocatore 1 (81)
+        Serial.write(POINT_P1); // Incremento punteggio - Giocatore 1
         resetBall(-1); // Reset pallina - "Servizio" verso il Giocatore che ha fatto punto (G1)
         if(p1.score > 9) { // Vittoria Giocatore 1 - Score pari a 10
           victoryScreen("Player 1"); return;

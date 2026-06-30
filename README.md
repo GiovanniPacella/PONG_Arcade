@@ -19,6 +19,7 @@ Il sistema si basa su un'architettura distribuita composta da tre board che comu
 **Comunicazione:** Il Master comunica con il primo controller tramite Seriale (UART), mentre i due controller si scambiano i dati di sincronizzazione in wireless attraverso il protocollo **ESP-NOW**.
 
 **Librerie**
+* `Comandi.h` : Header file personalizzato contenente i comandi pensati per la comunicazione tra le board
 * [`TVout.h`](https://docs.arduino.cc/libraries/tvout/): Generazione del segnale video analogico
 * `espnow.h`: Comunicazione wireless a bassa latenza
 * `ESP8266WiFi.h`: Libreria Wi-Fi
