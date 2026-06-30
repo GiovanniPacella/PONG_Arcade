@@ -45,5 +45,5 @@ _Nota: Lo schema seguente utilizza un sensore infrarossi FC-51 e non quello util
 - 2 x Display a 7 segmenti
 - 1 x Modulo Step-Down DC-DC (da 12V a 5V)
 - 1 x Speaker 1W 8Ω
-- Componenti passivi (resistenze da 100Ω / 220Ω / 330Ω / 470Ω / 1000Ω)
+- Componenti passivi (resistenze da 100Ω / 220Ω / 330Ω / 470Ω / 1000Ω / 2000Ω)
 
